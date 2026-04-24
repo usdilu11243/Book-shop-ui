@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ITE2613 — IT Project Management Study Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:       #f8fafc;
+    --navy-mid:   #ffffff;
+    --navy-soft:  #f1f5f9;
+    --accent:     #0284c7;
+    --accent-dim: rgba(2,132,199,0.09);
+    --accent2:    #6366f1;
+    --green:      #059669;
+    --text-pri:   #0f172a;
+    --text-sec:   #475569;
+    --text-ter:   #94a3b8;
+    --border:     rgba(0,0,0,0.08);
+    --border-soft:rgba(0,0,0,0.04);
+    --radius:     12px;
+    --radius-sm:  8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--text-pri);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+  .page {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    height: 3px;
+    background: linear-gradient(90deg, #38bdf8, #818cf8, #34d399);
+    margin-bottom: 0;
+  }
+
+  /* HEADER */
+  .header {
+    padding: 36px 0 28px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 32px;
+  }
+  .course-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-dim);
+    border: 1px solid rgba(2,132,199,0.2);
+    border-radius: 100px;
+    padding: 4px 12px;
+    margin-bottom: 16px;
+  }
+  .header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--text-pri);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 8px;
+  }
+  .header-desc {
+    font-size: 14px;
+    color: var(--text-sec);
+    font-weight: 300;
+    margin-bottom: 18px;
+  }
+  .header-stats {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12.5px;
+    color: var(--text-ter);
+  }
+  .stat-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+  .stat-dot.v2 { background: var(--accent2); }
+  .stat-dot.v3 { background: var(--green); }
+  .stat b { color: var(--text-sec); font-weight: 500; }
+
+  /* TABS */
+  .tabs-section { margin-bottom: 28px; }
+  .tabs-hint {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-ter);
+    margin-bottom: 10px;
+  }
+  .week-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tab {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 7px 16px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-ter);
+    cursor: pointer;
+    transition: all 0.18s ease;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .tab:hover {
+    color: var(--text-sec);
+    background: var(--navy-mid);
+    border-color: rgba(255,255,255,0.12);
+  }
+  .tab.active {
+    background: var(--accent);
+    color: #ffffff;
+    border-color: var(--accent);
+    font-weight: 700;
+    box-shadow: 0 0 18px rgba(2,132,199,0.25);
+  }
+
+  /* CONTENT */
+  .week-content { display: none; }
+  .week-content.active {
+    display: block;
+    animation: fadeUp 0.22s ease;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* WEEK HEADER CARD */
+  .week-hero {
+    display: flex;
+    gap: 0;
+    margin-bottom: 24px;
+    background: var(--navy-mid);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .week-accent-bar {
+    width: 4px;
+    background: linear-gradient(180deg, var(--accent) 0%, var(--accent2) 100%);
+    flex-shrink: 0;
+  }
+  .week-hero-body {
+    padding: 18px 20px;
+    flex: 1;
+  }
+  .week-badge {
+    display: inline-block;
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-dim);
+    border-radius: 6px;
+    padding: 3px 9px;
+    margin-bottom: 8px;
+  }
+  .week-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-pri);
+    letter-spacing: -0.01em;
+    margin-bottom: 4px;
+  }
+  .week-subtitle {
+    font-size: 13px;
+    color: var(--text-ter);
+    font-weight: 300;
+  }
+
+  /* SECTIONS */
+  .section { margin-bottom: 20px; }
+  .section-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-ter);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* SUMMARY */
+  .summary-box {
+    background: var(--navy-mid);
+    border: 1px solid var(--border);
+    border-left: 3px solid rgba(99,102,241,0.4);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 15px 18px;
+    font-size: 14px;
+    color: var(--text-sec);
+    line-height: 1.75;
+  }
+
+  /* KEY POINTS */
+  .key-points { list-style: none; }
+  .key-points li {
+    font-size: 14px;
+    color: var(--text-sec);
+    padding: 9px 0 9px 20px;
+    position: relative;
+    line-height: 1.55;
+    border-bottom: 1px solid var(--border-soft);
+    transition: color 0.15s;
+  }
+  .key-points li:last-child { border-bottom: none; }
+  .key-points li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 16px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.45;
+  }
+  .key-points li:hover { color: var(--text-pri); }
+
+  /* Q&A */
+  .qa-list { display: flex; flex-direction: column; gap: 6px; }
+  .qa-item {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .qa-item:hover { border-color: rgba(255,255,255,0.12); }
+  .qa-item.open { border-color: rgba(2,132,199,0.3); }
+  .qa-q {
+    padding: 11px 15px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-pri);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    background: var(--navy-mid);
+    transition: background 0.15s;
+    user-select: none;
+    line-height: 1.45;
+  }
+  .qa-q:hover { background: var(--navy-soft); }
+  .qa-item.open .qa-q { background: var(--navy-soft); }
+  .qa-icon {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 9px;
+    color: var(--text-ter);
+    transition: all 0.2s;
+    background: transparent;
+  }
+  .qa-item.open .qa-icon {
+    background: var(--accent-dim);
+    border-color: rgba(2,132,199,0.4);
+    color: var(--accent);
+    transform: rotate(180deg);
+  }
+  .qa-a {
+    display: none;
+    padding: 12px 15px;
+    font-size: 13.5px;
+    color: var(--text-sec);
+    line-height: 1.72;
+    border-top: 1px solid var(--border-soft);
+    background: #f8fafc;
+  }
+  .qa-item.open .qa-a { display: block; }
+
+  @media (max-width: 580px) {
+    .page { padding: 0 14px 60px; }
+    .header h1 { font-size: 22px; }
+    .week-title { font-size: 15px; }
+    .tab { font-size: 11px; padding: 6px 12px; }
+    .header-stats { gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"></div>
+
+<div class="page">
+
+  <div class="header">
+    <div class="course-tag">ITE2613</div>
+    <h1>IT Project Management</h1>
+    <p class="header-desc">Comprehensive study notes &amp; exam Q&amp;A &nbsp;·&nbsp; Weeks 1–12</p>
+    <div class="header-stats">
+      <div class="stat"><div class="stat-dot"></div><b>12</b> Weeks covered</div>
+      <div class="stat"><div class="stat-dot v2"></div><b>60+</b> Exam questions</div>
+      <div class="stat"><div class="stat-dot v3"></div><b>Summary</b> + Key points per week</div>
+    </div>
+  </div>
+
+  <div class="tabs-section">
+    <div class="tabs-hint">Select a week</div>
+    <div class="week-tabs">
+      <div class="tab active" onclick="show('w1')">Week 1</div>
+      <div class="tab" onclick="show('w2')">Week 2</div>
+      <div class="tab" onclick="show('w3')">Week 3</div>
+      <div class="tab" onclick="show('w4')">Week 4</div>
+      <div class="tab" onclick="show('w5')">Week 5</div>
+      <div class="tab" onclick="show('w6')">Week 6</div>
+      <div class="tab" onclick="show('w7')">Week 7</div>
+      <div class="tab" onclick="show('w8')">Week 8</div>
+      <div class="tab" onclick="show('w9')">Week 9</div>
+      <div class="tab" onclick="show('w10')">Week 10</div>
+      <div class="tab" onclick="show('w11')">Week 11</div>
+      <div class="tab" onclick="show('w12')">Week 12</div>
+    </div>
+  </div>
+
+  <!-- WEEK 1 -->
+  <div id="w1" class="week-content active">
+    <div class="week-hero"><div class="week-accent-bar"></div><div class="week-hero-body">
+      <div class="week-badge">Week 1</div>
+      <div class="week-title">Introduction to IT Project Management</div>
+      <div class="week-subtitle">What projects are, key attributes, constraints, and process groups</div>
+    </div></div>
+    <div class="section"><div class="section-label">Summary</div>
+      <div class="summary-box">A project is a temporary endeavor to create a unique product, service, or result. IT projects span from small hardware installs to large multi-year software systems. Project management applies knowledge, skills, tools, and techniques to meet project requirements. The five PMBOK process groups are Initiating, Planning, Executing, Monitoring &amp; Controlling, and Closing.</div>
+    </div>
+    <div class="section"><div class="section-label">Key Points</div>
+      <ul class="key-points">
+        <li>A project has a unique purpose, is temporary, drives change, and involves uncertainty</li>
+        <li>The triple constraint: Scope, Time, and Cost — all must be balanced</li>
+        <li>A program = related projects managed together for benefits not available individually</li>
+        <li>A portfolio = projects/programs managed as a group to achieve strategic objectives</li>
+        <li>IT projects need strong governance to avoid cost/schedule overruns</li>
+        <li>IT teams must recognize and stop failing projects early</li>
+        <li>Project challenges: Issues, Risks, Assumptions, Constraints</li>
+      </ul>
+    </div>
+    <div class="section"><div class="section-label">Exam Q&amp;A</div><div class="qa-list">
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What is a project? <span class="qa-icon">▼</span></div><div class="qa-a">A temporary endeavor undertaken to create a unique product, service, or result. It has a definite beginning and end, delivers value, and involves uncertainty.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What are the three elements of the triple constraint? <span class="qa-icon">▼</span></div><div class="qa-a">Scope, Time, and Cost. Every project is constrained by these three, and balancing them is a core project management responsibility.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">List the five PMBOK process groups in order. <span class="qa-icon">▼</span></div><div class="qa-a">1. Initiating, 2. Planning, 3. Executing, 4. Monitoring &amp; Controlling, 5. Closing.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What is the difference between a program and a portfolio? <span class="qa-icon">▼</span></div><div class="qa-a">A program is a group of related projects managed together to gain benefits not available individually. A portfolio is a collection of projects, programs, and operations managed as a group to achieve strategic organizational objectives.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">Name four key attributes of a project. <span class="qa-icon">▼</span></div><div class="qa-a">A project has a unique purpose, is temporary, drives change, requires resources from various areas, involves uncertainty, has a primary customer or sponsor, and is developed using progressive elaboration.</div></div>
+    </div></div>
+  </div>
+
+  <!-- WEEK 2 -->
+  <div id="w2" class="week-content">
+    <div class="week-hero"><div class="week-accent-bar"></div><div class="week-hero-body">
+      <div class="week-badge">Week 2</div>
+      <div class="week-title">Project Management Methodologies</div>
+      <div class="week-subtitle">Waterfall, Agile, Scrum, Kanban, Lean, CPM, CCM, PRINCE2</div>
+    </div></div>
+    <div class="section"><div class="section-label">Summary</div>
+      <div class="summary-box">A project management methodology is a structured framework guiding how a project is planned, executed, monitored, and completed. Traditional (Waterfall) uses upfront planning and one final deliverable. Agile is iterative with continuous delivery. Various methodologies suit different project types: Scrum (software), Kanban (continuous flow), Lean (waste reduction), CPM (scheduling), CCM (resource constraints), PRINCE2 (government/enterprise).</div>
+    </div>
+    <div class="section"><div class="section-label">Key Points</div>
+      <ul class="key-points">
+        <li>Waterfall phases: Requirements → Design → Implementation → Verification → Maintenance</li>
+        <li>Waterfall suits projects with fixed, stable, well-defined requirements</li>
+        <li>Agile values: Individuals &amp; interactions, Working solutions, Customer collaboration, Responding to change</li>
+        <li>Scrum uses sprints (1–4 weeks), daily stand-ups, product backlog, sprint reviews</li>
+        <li>Kanban uses a board with To Do / In Progress / Done columns; limits WIP</li>
+        <li>Lean originated at Toyota; focuses on eliminating waste and maximizing value</li>
+        <li>CPM identifies the critical path — the longest sequence of dependent tasks</li>
+        <li>CCM extends CPM by considering resource availability and adding buffers</li>
+        <li>PRINCE2 = Projects IN Controlled Environments; widely used outside the US</li>
+      </ul>
+    </div>
+    <div class="section"><div class="section-label">Exam Q&amp;A</div><div class="qa-list">
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What are the five phases of the Waterfall methodology? <span class="qa-icon">▼</span></div><div class="qa-a">Requirements, Design, Implementation, Verification, and Maintenance.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What are the four core values of the Agile Manifesto? <span class="qa-icon">▼</span></div><div class="qa-a">1. Individuals and interactions over processes and tools. 2. Working software over comprehensive documentation. 3. Customer collaboration over contract negotiation. 4. Responding to change over following a fixed plan.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What is the Critical Path Method (CPM)? <span class="qa-icon">▼</span></div><div class="qa-a">A scheduling technique that identifies the longest sequence of dependent tasks that must be completed to finish a project on time. Any delay in critical path tasks directly delays the project.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">How does Critical Chain Management (CCM) differ from CPM? <span class="qa-icon">▼</span></div><div class="qa-a">CCM focuses on resource availability (not just task duration) and adds strategic buffers at key points in the schedule to protect against delays from resource shortages or uncertainty.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What does PRINCE2 stand for and when is it used? <span class="qa-icon">▼</span></div><div class="qa-a">Projects IN Controlled Environments. It is a process-based methodology used in 150+ countries, suitable for complex but predictable projects requiring clear roles and formal governance — especially government and large-scale IT projects.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What are the key Kanban practices? <span class="qa-icon">▼</span></div><div class="qa-a">Visualize the workflow, limit work in progress (WIP), manage flow, make policies explicit, use feedback loops, and improve collaboratively.</div></div>
+    </div></div>
+  </div>
+
+  <!-- WEEK 3 -->
+  <div id="w3" class="week-content">
+    <div class="week-hero"><div class="week-accent-bar"></div><div class="week-hero-body">
+      <div class="week-badge">Week 3</div>
+      <div class="week-title">Foundations of Agile Project Management</div>
+      <div class="week-subtitle">Agile manifesto, Scrum roles, Kanban board, other Agile frameworks</div>
+    </div></div>
+    <div class="section"><div class="section-label">Summary</div>
+      <div class="summary-box">Agile was introduced in 2001 by 17 software developers. It is a mindset guided by the Agile Manifesto, not a single methodology. Agile delivers value early through iterative cycles. Scrum is the most popular Agile framework, using sprints and defined roles. Kanban visualizes work and limits WIP for continuous delivery. Other frameworks include XP, FDD, Lean, and Crystal.</div>
+    </div>
+    <div class="section"><div class="section-label">Key Points</div>
+      <ul class="key-points">
+        <li>Agile development cycle: Requirements → Plan → Design → Develop → Test → Deploy → Monitor (iterative)</li>
+        <li>Scrum roles: Product Owner (backlog/vision), Scrum Master (facilitates/removes blockers), Scrum Team (self-organizing, cross-functional)</li>
+        <li>Scrum events: Sprint Planning, Daily Scrum (15 min), Sprint Review, Sprint Retrospective</li>
+        <li>Scrum artifacts: Product Backlog, Sprint Backlog, Burndown Chart</li>
+        <li>Kanban originated from Toyota Production System; focuses on continuous delivery</li>
+        <li>Agile advantages: embraces change, faster delivery, customer involvement, continuous feedback</li>
+        <li>Agile disadvantages: less predictable planning, requires skilled team, limited documentation risk</li>
+      </ul>
+    </div>
+    <div class="section"><div class="section-label">Exam Q&amp;A</div><div class="qa-list">
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What are the three Scrum roles? <span class="qa-icon">▼</span></div><div class="qa-a">Product Owner (defines vision, prioritizes backlog), Scrum Master (facilitates process, removes obstacles), and the Scrum Team (cross-functional, self-organizing, responsible for delivery).</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What are the four Scrum events? <span class="qa-icon">▼</span></div><div class="qa-a">Sprint Planning (select work), Daily Scrum (15-minute stand-up), Sprint Review (demonstrate completed work to stakeholders), Sprint Retrospective (team reflects and improves).</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What is a Burndown Chart? <span class="qa-icon">▼</span></div><div class="qa-a">A Scrum artifact that visualizes the amount of remaining work over time within a sprint, helping teams track progress toward their sprint goal.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">Name three advantages and two disadvantages of Agile. <span class="qa-icon">▼</span></div><div class="qa-a">Advantages: embraces change, faster delivery through short iterations, strong customer involvement. Disadvantages: less predictable planning/delivery dates, requires highly skilled and experienced team members.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">How does Kanban differ from Scrum? <span class="qa-icon">▼</span></div><div class="qa-a">Scrum uses fixed-length sprints with defined roles and ceremonies. Kanban is a continuous flow system with no fixed iterations — it focuses on visualizing work, limiting WIP, and minimizing cycle time without fixed-length development cycles.</div></div>
+    </div></div>
+  </div>
+
+  <!-- WEEK 4 -->
+  <div id="w4" class="week-content">
+    <div class="week-hero"><div class="week-accent-bar"></div><div class="week-hero-body">
+      <div class="week-badge">Week 4</div>
+      <div class="week-title">Project Initiation</div>
+      <div class="week-subtitle">Initiating Process Group, Project Charter, Stakeholder Identification</div>
+    </div></div>
+    <div class="section"><div class="section-label">Summary</div>
+      <div class="summary-box">Project initiation formally starts a project and answers why it exists, who is involved, and who has authority. The Initiating Process Group contains two key processes: Develop Project Charter and Identify Stakeholders. The Project Charter authorizes the project, grants PM authority, and links the project to organizational strategy. The Stakeholder Register documents all stakeholders and their interests, power, and influence.</div>
+    </div>
+    <div class="section"><div class="section-label">Key Points</div>
+      <ul class="key-points">
+        <li>Project Charter inputs: Business case, Benefits management plan, Agreements (contracts/MOUs), EEFs, OPAs</li>
+        <li>Project Charter contents: Purpose, objectives, high-level scope, milestone schedule, budget, risks, stakeholder list, PM authority</li>
+        <li>Tools for Develop Project Charter: Expert judgment, Data gathering (brainstorming, interviews), Facilitation</li>
+        <li>Business case explains reason, expected value, cost-benefit justification, and strategic alignment</li>
+        <li>Project Sponsor: approves charter, provides financial/org support, resolves escalations</li>
+        <li>Stakeholder analysis models: Power–Interest Grid, Power–Influence Grid, Influence–Impact Matrix</li>
+        <li>Stakeholder Register contains: name/role, contact info, influence/interest level, expectations, classification</li>
+        <li>EEFs = Enterprise Environmental Factors (external); OPAs = Organizational Process Assets (internal)</li>
+      </ul>
+    </div>
+    <div class="section"><div class="section-label">Exam Q&amp;A</div><div class="qa-list">
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What are the two processes in the Initiating Process Group? <span class="qa-icon">▼</span></div><div class="qa-a">1. Develop Project Charter, and 2. Identify Stakeholders.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What is the purpose of the Project Charter? <span class="qa-icon">▼</span></div><div class="qa-a">It formally authorizes the project, grants authority to the project manager, defines high-level scope and objectives, links the project to organizational strategy, and serves as a foundation for planning.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What are EEFs and OPAs? Give examples. <span class="qa-icon">▼</span></div><div class="qa-a">EEFs (Enterprise Environmental Factors) are external conditions influencing the project — e.g., market conditions, government regulations. OPAs (Organizational Process Assets) are internal resources — e.g., templates, historical data, lessons learned.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What does the Stakeholder Register contain? <span class="qa-icon">▼</span></div><div class="qa-a">Stakeholder name and role, contact information, influence and interest level, expectations and requirements, and classification/priority. It is continuously updated throughout the project.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">Why is early stakeholder identification important? <span class="qa-icon">▼</span></div><div class="qa-a">Failure to identify stakeholders early can cause resistance to change, missed requirements, delays, rework, and project failure. Early identification improves communication, decision-making, and stakeholder buy-in.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What is the role of the Project Sponsor? <span class="qa-icon">▼</span></div><div class="qa-a">The sponsor provides financial and organizational support, approves the project charter, resolves escalated issues, and champions the project at senior management levels. Strong sponsorship is a critical success factor.</div></div>
+    </div></div>
+  </div>
+
+  <!-- WEEK 5 -->
+  <div id="w5" class="week-content">
+    <div class="week-hero"><div class="week-accent-bar"></div><div class="week-hero-body">
+      <div class="week-badge">Week 5</div>
+      <div class="week-title">Project Schedule Management &amp; CPM</div>
+      <div class="week-subtitle">Scheduling processes, network diagrams, critical path, float calculations</div>
+    </div></div>
+    <div class="section"><div class="section-label">Summary</div>
+      <div class="summary-box">Project schedule management ensures timely completion through six processes: Plan Schedule Management, Define Activities, Sequence Activities, Estimate Activity Durations, Develop Schedule, and Control Schedule. The Critical Path Method (CPM) identifies the longest path in a network and calculates ES, EF, LS, LF, Total Float, and Free Float. AOA and AON are the two network diagram types.</div>
+    </div>
+    <div class="section"><div class="section-label">Key Points</div>
+      <ul class="key-points">
+        <li>Six Schedule Management processes: Plan → Define → Sequence → Estimate → Develop → Control</li>
+        <li>Activity relationships: Finish-to-Start (FS), Finish-to-Finish (FF), Start-to-Start (SS), Start-to-Finish (SF)</li>
+        <li>Lead = time a successor activity can start early; Lag = delay added between activities</li>
+        <li>Critical Path = longest sequence of activities; determines minimum project duration; total float = 0</li>
+        <li>Forward pass calculates ES and EF; Backward pass calculates LS and LF</li>
+        <li>Total Float = LF − EF or LS − ES (can delay activity without delaying project)</li>
+        <li>Free Float = ES of successor − EF of activity (can delay without affecting successor)</li>
+        <li>Dummy activity in AOA: zero duration, used only to show dependencies</li>
+        <li>Fulkerson's Rule: number nodes by removing arrows iteratively from initial events</li>
+      </ul>
+    </div>
+    <div class="section"><div class="section-label">Exam Q&amp;A</div><div class="qa-list">
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What is the Critical Path and why does it matter? <span class="qa-icon">▼</span></div><div class="qa-a">The critical path is the longest sequence of dependent activities in a project network. It determines the shortest possible project duration. Any delay on the critical path directly delays the project finish date.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">Define Total Float and Free Float. Give their formulas. <span class="qa-icon">▼</span></div><div class="qa-a">Total Float = the amount of time an activity can be delayed without delaying the project. Formula: TF = LF − EF (or LS − ES). Free Float = the time an activity can be delayed without affecting the early start of its successor. Formula: FF = ES(successor) − EF(activity).</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What are the four types of activity relationships in CPM? <span class="qa-icon">▼</span></div><div class="qa-a">Finish-to-Start, Finish-to-Finish, Start-to-Start, and Start-to-Finish. FS is most common — successor cannot start until predecessor finishes.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What is the difference between Lead and Lag? <span class="qa-icon">▼</span></div><div class="qa-a">Lead is the amount of time a successor activity can be advanced (started early) relative to its predecessor. Lag is the amount of required delay before the successor can start after the predecessor finishes.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What is a dummy activity in an AOA network? <span class="qa-icon">▼</span></div><div class="qa-a">A dummy activity requires no time or resources (duration = 0). It is used in AOA networks only to correctly represent dependencies between activities and to ensure each activity has a unique identity.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What does total float = 0 signify? <span class="qa-icon">▼</span></div><div class="qa-a">Activities with total float = 0 are on the critical path. They have no scheduling flexibility — any delay will directly delay the project completion date.</div></div>
+    </div></div>
+  </div>
+
+  <!-- WEEK 6 -->
+  <div id="w6" class="week-content">
+    <div class="week-hero"><div class="week-accent-bar"></div><div class="week-hero-body">
+      <div class="week-badge">Week 6</div>
+      <div class="week-title">Project Resource Management</div>
+      <div class="week-subtitle">Planning, allocating, and controlling human, financial, and physical resources</div>
+    </div></div>
+    <div class="section"><div class="section-label">Summary</div>
+      <div class="summary-box">Project resource management focuses on ensuring the right resources are available at the right time. It covers human, financial, physical resources, and tools. Resource capacity planning prevents overcommitment. Key techniques include resource leveling (adjust schedules) and resource smoothing (redistribute within deadlines). Effective resource management prevents delays, controls costs, and improves productivity.</div>
+    </div>
+    <div class="section"><div class="section-label">Key Points</div>
+      <ul class="key-points">
+        <li>Types of resources: Human, Financial, Physical, Time/Capacity, Tools &amp; Technology</li>
+        <li>Main components: Planning → Acquisition → Allocation → Scheduling → Monitoring → Optimization → Conflict Resolution → Performance Evaluation → Release</li>
+        <li>Resource Leveling: adjust schedules to reduce overallocation conflicts</li>
+        <li>Resource Smoothing: redistribute work within fixed deadlines</li>
+        <li>Resource Breakdown Structure (RBS) used in planning</li>
+        <li>Key tools: Workload/Capacity views, Resource Calendars, Time Tracking, Forecasting Dashboards</li>
+        <li>Common challenges: shortages, overallocation, unclear roles, poor communication, scope changes</li>
+      </ul>
+    </div>
+    <div class="section"><div class="section-label">Exam Q&amp;A</div><div class="qa-list">
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What is project resource management? <span class="qa-icon">▼</span></div><div class="qa-a">The process of planning, allocating, and controlling resources (human, financial, physical) to meet project objectives efficiently. It ensures the right resources are available at the right time and used optimally.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What is the difference between resource leveling and resource smoothing? <span class="qa-icon">▼</span></div><div class="qa-a">Resource leveling adjusts the project schedule to resolve resource conflicts and overallocation — it may extend the project duration. Resource smoothing redistributes work within the existing schedule constraints without changing the project end date.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">Name five types of project resources. <span class="qa-icon">▼</span></div><div class="qa-a">Human Resources (team members/experts), Financial Resources (budget/funding), Physical Resources (equipment/materials), Time and Capacity (available working time), and Tools and Technology (software/systems).</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What is resource capacity in project management? <span class="qa-icon">▼</span></div><div class="qa-a">Resource capacity is the amount of work that people, tools, and equipment can realistically handle within a set period. Managing capacity prevents overcommitment and burnout, and ensures tasks are completed efficiently.</div></div>
+    </div></div>
+  </div>
+
+  <!-- WEEK 7 -->
+  <div id="w7" class="week-content">
+    <div class="week-hero"><div class="week-accent-bar"></div><div class="week-hero-body">
+      <div class="week-badge">Week 7</div>
+      <div class="week-title">Project Cost Management</div>
+      <div class="week-subtitle">Estimation, budgeting, cost control, and Earned Value Management (EVM)</div>
+    </div></div>
+    <div class="section"><div class="section-label">Summary</div>
+      <div class="summary-box">Project Cost Management ensures costs stay within budget through four steps: Resource Planning, Cost Estimation, Cost Budgeting, and Cost Control. Estimation techniques include analogous, parametric, PERT, top-down, and bottom-up methods. The cost baseline enables performance measurement. Earned Value Management (EVM) uses PV, EV, and AC to measure schedule and cost performance.</div>
+    </div>
+    <div class="section"><div class="section-label">Key Points</div>
+      <ul class="key-points">
+        <li>Four steps: Resource Planning → Cost Estimation → Cost Budgeting → Cost Control</li>
+        <li>Estimation techniques: Analogous, Parametric, PERT, Top-down, Bottom-up</li>
+        <li>Costing methods: Activity-Based Costing, Job Costing, Lifecycle Costing</li>
+        <li>Lifecycle Costing considers development + operation + maintenance + replacement costs</li>
+        <li>Value Engineering: optimize function vs cost, improve value without reducing quality</li>
+        <li>Cost Baseline = allocated budget across tasks and time; used for variance tracking</li>
+        <li>EVM: PV = Planned Value, EV = Earned Value, AC = Actual Cost</li>
+        <li>Schedule Variance (SV) = EV − PV; Cost Variance (CV) = EV − AC</li>
+        <li>SV negative = behind schedule; CV positive = under budget</li>
+      </ul>
+    </div>
+    <div class="section"><div class="section-label">Exam Q&amp;A</div><div class="qa-list">
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What are the four steps of project cost management? <span class="qa-icon">▼</span></div><div class="qa-a">1. Resource Planning (identify required resources), 2. Cost Estimation (quantify costs), 3. Cost Budgeting (allocate costs across tasks/time), 4. Cost Control (monitor and take corrective action).</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">Explain EVM and its three key metrics. <span class="qa-icon">▼</span></div><div class="qa-a">Earned Value Management (EVM) measures project performance. PV (Planned Value) = budgeted cost for planned work; EV (Earned Value) = budgeted cost for work actually performed; AC (Actual Cost) = actual cost incurred for work performed.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">How do you calculate Schedule Variance and Cost Variance? <span class="qa-icon">▼</span></div><div class="qa-a">Schedule Variance (SV) = EV − PV. If negative, the project is behind schedule. Cost Variance (CV) = EV − AC. If positive, the project is under budget; if negative, it is over budget.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">EVM Example: Task budget $4,000, planned 50% done, actually 25% done, AC = $800. Calculate PV, EV, SV, CV. <span class="qa-icon">▼</span></div><div class="qa-a">PV = 50% × $4,000 = $2,000. EV = 25% × $4,000 = $1,000. SV = EV − PV = $1,000 − $2,000 = −$1,000 (behind schedule). CV = EV − AC = $1,000 − $800 = +$200 (under budget).</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What is lifecycle costing? <span class="qa-icon">▼</span></div><div class="qa-a">A costing methodology that considers the full lifecycle of a product or system including development, operation, maintenance, and replacement costs — not just initial project costs. It encourages long-term financial thinking.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What is the role of the cost baseline? <span class="qa-icon">▼</span></div><div class="qa-a">The cost baseline is the approved budget distributed across tasks and time. It enables performance measurement, allows variance tracking, and supports phased funding decisions. Without a baseline, there is no control benchmark.</div></div>
+    </div></div>
+  </div>
+
+  <!-- WEEK 8 -->
+  <div id="w8" class="week-content">
+    <div class="week-hero"><div class="week-accent-bar"></div><div class="week-hero-body">
+      <div class="week-badge">Week 8</div>
+      <div class="week-title">Quality Assurance in IT Projects</div>
+      <div class="week-subtitle">QA vs QC, audits, tools, software QA, and the future of QA</div>
+    </div></div>
+    <div class="section"><div class="section-label">Summary</div>
+      <div class="summary-box">Quality Assurance (QA) audits quality requirements and control measurements to ensure appropriate standards are used. QA creates systems to measure and control quality (proactive); Quality Control measures individual deliverables (reactive). QA audits involve root cause analysis, preventative actions, and process improvements. AI/ML are increasingly used in QA for predictive maintenance and anomaly detection.</div>
+    </div>
+    <div class="section"><div class="section-label">Key Points</div>
+      <ul class="key-points">
+        <li>QA = proactive system to ensure quality processes; QC = reactive measurement of individual deliverables</li>
+        <li>QA audit activities: analyze QC data, identify improvements, root cause analysis, determine preventative actions</li>
+        <li>QA tools: Affinity diagrams, Process decision charts, Interrelationship diagrams, Tree diagrams, Prioritization matrices, Network diagrams, Matrix diagrams</li>
+        <li>Importance of QA: Customer satisfaction, Public trust, Product quality (prevents defects proactively)</li>
+        <li>Software QA (SQA): systematic approach to identify patterns and improve development processes</li>
+        <li>SQA career roles: SQA Engineer, Analyst, Manager, Test Automation Specialist</li>
+        <li>Future of QA: AI/ML for predictive maintenance, real-time anomaly detection, low-code/no-code tools</li>
+      </ul>
+    </div>
+    <div class="section"><div class="section-label">Exam Q&amp;A</div><div class="qa-list">
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What is the difference between QA and QC? <span class="qa-icon">▼</span></div><div class="qa-a">QA (Quality Assurance) creates systems and processes to measure and control quality — it is proactive and aims to prevent defects. QC (Quality Control) measures the quality of individual products or deliverables and accepts or rejects them — it is reactive.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What activities are included in a QA audit? <span class="qa-icon">▼</span></div><div class="qa-a">Analyzing quality control data to identify problems, identifying process improvements to increase quality, performing root cause analysis to determine necessary improvements, and determining preventative actions to deter future quality issues.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">Why is QA important for an organization? <span class="qa-icon">▼</span></div><div class="qa-a">QA builds customer satisfaction by meeting needs and expectations, builds public trust and loyalty, and prevents product defects through proactive standards and procedures. It also facilitates improvement in quality processes overall.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">How are AI and ML being used in QA? <span class="qa-icon">▼</span></div><div class="qa-a">AI and ML are used to inspect products and monitor machinery performance, support predictive maintenance by identifying potential problems before failures occur, analyze real-time data to detect patterns and anomalies, and help identify quality issues early before they become major defects.</div></div>
+    </div></div>
+  </div>
+
+  <!-- WEEK 9 -->
+  <div id="w9" class="week-content">
+    <div class="week-hero"><div class="week-accent-bar"></div><div class="week-hero-body">
+      <div class="week-badge">Week 9</div>
+      <div class="week-title">Project Risk Management</div>
+      <div class="week-subtitle">Risk types, attitudes, appetite, probability/impact, and risk lifecycle</div>
+    </div></div>
+    <div class="section"><div class="section-label">Summary</div>
+      <div class="summary-box">Project risk is an uncertain event that, if it occurs, has a positive or negative effect on project objectives. Positive risks are opportunities; negative risks are threats. Risk management follows a lifecycle: Plan → Identify → Qualitative Analysis → Quantitative Analysis → Plan Responses → Implement Responses → Monitor. Seven PMI principles guide risk management practice.</div>
+    </div>
+    <div class="section"><div class="section-label">Key Points</div>
+      <ul class="key-points">
+        <li>Risk value = Probability × Impact</li>
+        <li>Risk Attitude: ranges from risk averse to risk seeking; varies by situation</li>
+        <li>Risk Appetite: degree of uncertainty an organization is willing to accept for a reward (PMI)</li>
+        <li>Risk Threshold: measure of acceptable variation before escalation is triggered</li>
+        <li>Four risk categories: Known-Known (facts), Known-Unknown (classic risk), Unknown-Known (hidden fact), Unknown-Unknown (emergent)</li>
+        <li>7 PMI Risk Principles: Excellence, Organizational alignment, Focus on impactful risks, Balance value vs risk, Foster risk culture, Navigate complexity, Continuous improvement</li>
+        <li>Risk Lifecycle: Plan → Identify → Qualitative Analysis → Quantitative Analysis → Plan Responses → Implement → Monitor</li>
+      </ul>
+    </div>
+    <div class="section"><div class="section-label">Exam Q&amp;A</div><div class="qa-list">
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What is a project risk? How do positive and negative risks differ? <span class="qa-icon">▼</span></div><div class="qa-a">A project risk is an uncertain event or condition that, if it occurs, has a positive or negative effect on project objectives. Positive risks are called opportunities (beneficial outcomes). Negative risks are called threats (harmful outcomes).</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What are the four categories of risk? <span class="qa-icon">▼</span></div><div class="qa-a">Known-Known (facts and requirements you are aware of), Known-Unknown (classic risk — you know it might happen but not whether it will), Unknown-Known (hidden fact — something that is true but unrecognized), Unknown-Unknown (emergent — completely unforeseen).</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What is the difference between risk appetite and risk threshold? <span class="qa-icon">▼</span></div><div class="qa-a">Risk appetite is the degree of uncertainty an organization is willing to accept in anticipation of a reward — it reflects strategic willingness to take risk. Risk threshold is the specific measure of acceptable variation around an objective before an escalation is triggered — it is the operational boundary.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">List the seven steps in the Risk Management Lifecycle. <span class="qa-icon">▼</span></div><div class="qa-a">1. Plan Risk Management, 2. Identify Risks, 3. Perform Qualitative Risk Analysis, 4. Perform Quantitative Risk Analysis, 5. Plan Risk Responses, 6. Implement Risk Responses, 7. Monitor Risks.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What are the seven PMI Risk Management Principles? <span class="qa-icon">▼</span></div><div class="qa-a">1. Strive for excellence in risk management practice. 2. Align with organizational strategy. 3. Focus on the most impactful risks. 4. Balance value realization against overall risk. 5. Foster a culture that embraces risk management. 6. Navigate complexity using risk management. 7. Continuously improve risk management competencies.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">How is risk value calculated? <span class="qa-icon">▼</span></div><div class="qa-a">Risk Value = Probability × Impact. Probability is the likelihood of the risk occurring (0%–100%). Impact is the positive or negative consequence if the risk occurs. Multiplying them gives an overall risk measure for prioritization.</div></div>
+    </div></div>
+  </div>
+
+  <!-- WEEK 10 -->
+  <div id="w10" class="week-content">
+    <div class="week-hero"><div class="week-accent-bar"></div><div class="week-hero-body">
+      <div class="week-badge">Week 10</div>
+      <div class="week-title">Effective Communication in Projects</div>
+      <div class="week-subtitle">Communication process, types, management plan, barriers, and best practices</div>
+    </div></div>
+    <div class="section"><div class="section-label">Summary</div>
+      <div class="summary-box">Communication is described as the "lifeblood" of project management. Project managers spend ~90% of their time communicating. The communication process includes Sender, Message, Medium, Receiver, Feedback, and Noise. Only 7% of communication is verbal; 55% is non-verbal. A Communication Management Plan defines what, who, when, how, and escalation procedures.</div>
+    </div>
+    <div class="section"><div class="section-label">Key Points</div>
+      <ul class="key-points">
+        <li>Lasswell's model: Who says what, To whom, Through which channel, With what effect</li>
+        <li>Communication breakdown: 7% verbal, 38% tone/voice, 55% non-verbal</li>
+        <li>Types: Verbal (meetings), Written (emails/reports), Non-verbal (body language)</li>
+        <li>Communication Management Plan defines: what info, who needs it, when/how, methods, escalation</li>
+        <li>Steps for effective communication: identify requirements, define 5Ws+1H, consider environmental factors, establish feedback mechanisms</li>
+        <li>Common barriers: information overload, cultural differences, language issues, lack of clarity, remote work challenges</li>
+        <li>Overcoming barriers: simple language, active listening, open culture, adapt to audience, right tools</li>
+        <li>Face-to-face is best for complex/sensitive issues; email for routine updates</li>
+      </ul>
+    </div>
+    <div class="section"><div class="section-label">Exam Q&amp;A</div><div class="qa-list">
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What percentage of communication is verbal vs non-verbal? <span class="qa-icon">▼</span></div><div class="qa-a">Only 7% of communication is verbal. 38% depends on tone and voice. 55% is non-verbal (body language, gestures). This highlights the importance of face-to-face communication for complex or sensitive discussions.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What are the six elements of the communication process? <span class="qa-icon">▼</span></div><div class="qa-a">Sender (initiates message), Message (information being communicated), Medium (channel used), Receiver (interprets the message), Feedback (confirms understanding), Noise (any distortion affecting the message).</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What does a Communication Management Plan define? <span class="qa-icon">▼</span></div><div class="qa-a">It defines what information should be communicated, who needs the information, when and how communication occurs, communication methods (emails, meetings, reports), and escalation procedures.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What are the main barriers to effective communication in projects? <span class="qa-icon">▼</span></div><div class="qa-a">Information overload, cultural differences, language and terminology issues, lack of clarity in messages, and remote work challenges. These can lead to misunderstandings, delays, and conflicts if not managed.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What is Lasswell's communication model? <span class="qa-icon">▼</span></div><div class="qa-a">Lasswell's model describes communication as: Who says What, To Whom, Through Which Channel, With What Effect. In project management this means communication must be purposeful, structured, and outcome-oriented — the right information to the right person at the right time.</div></div>
+    </div></div>
+  </div>
+
+  <!-- WEEK 11 -->
+  <div id="w11" class="week-content">
+    <div class="week-hero"><div class="week-accent-bar"></div><div class="week-hero-body">
+      <div class="week-badge">Week 11</div>
+      <div class="week-title">Leadership in Project Management</div>
+      <div class="week-subtitle">Leadership styles, skills, theories, and the leader vs manager distinction</div>
+    </div></div>
+    <div class="section"><div class="section-label">Summary</div>
+      <div class="summary-box">Leadership in project management is a soft skill combining art and science — it focuses on achieving results through people. A project leader differs from a manager: leadership inspires and focuses on vision/people, while management plans, organizes, and controls tasks/processes. Leadership styles include Transformational, Transactional, Servant, and Adaptive. Effective leadership improves team motivation, decision-making, and project success.</div>
+    </div>
+    <div class="section"><div class="section-label">Key Points</div>
+      <ul class="key-points">
+        <li>Leadership roles: define vision, inspire/motivate, facilitate decisions, manage risks, ensure communication</li>
+        <li>Leader vs Manager: Leadership = inspires, people/vision focused; Management = plans/controls, task/process focused</li>
+        <li>Key leadership skills: Communication, Adaptability, Delegation, Decision-making, Problem-solving, Time management</li>
+        <li>Additional competencies: Risk evaluation, Analytical thinking, Building cohesion, Motivating, Creating urgency, Delivering results</li>
+        <li>Transformational: inspires vision, innovation, team growth, strong commitment</li>
+        <li>Transactional: rewards/penalties, structure and control, ensures task completion</li>
+        <li>Servant: prioritizes team needs, builds trust and collaboration, enhances morale</li>
+        <li>Leadership matrix quadrants: Reactive People, Reactive Task, Proactive People, Proactive Task</li>
+        <li>Leadership theories: Great Man, Transformational, Adaptive, Strengths-Based, Leader-Member Exchange</li>
+      </ul>
+    </div>
+    <div class="section"><div class="section-label">Exam Q&amp;A</div><div class="qa-list">
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">How does a project leader differ from a project manager? <span class="qa-icon">▼</span></div><div class="qa-a">A project leader inspires and motivates — focused on people and vision. A project manager plans, organizes, and controls — focused on tasks and processes. Effective project leaders combine both, but leadership is about achieving results through others.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">Describe the three main leadership styles covered in this module. <span class="qa-icon">▼</span></div><div class="qa-a">Transformational: inspires vision and innovation, focuses on team growth and commitment. Transactional: based on rewards and penalties, focuses on structure, control, and task completion. Servant: prioritizes team needs over the leader's own, builds trust, collaboration, and morale.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What are six key skills of a project leader? <span class="qa-icon">▼</span></div><div class="qa-a">Communication, Adaptability, Delegation, Decision-making, Problem-solving, and Time management. Additional competencies include risk evaluation, analytical thinking, building team cohesion, motivating people, creating urgency, and delivering results.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">Why is leadership important in project management? <span class="qa-icon">▼</span></div><div class="qa-a">Leadership motivates team performance, builds trust and collaboration, ensures clear communication, helps manage uncertainty and change, and improves stakeholder satisfaction. Strong leadership directly contributes to achieving project goals.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What are some "do's and don'ts" of leading by example? <span class="qa-icon">▼</span></div><div class="qa-a">Do: support the team and vision, follow through on commitments, be punctual and responsible. Don't: take all credit for team success, blame others for failures, or ignore team contributions.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What is the Leadership Matrix? <span class="qa-icon">▼</span></div><div class="qa-a">A framework with two dimensions — Reactive vs Proactive, and People-oriented vs Task-oriented — forming four quadrants: Reactive-People, Reactive-Task, Proactive-People, and Proactive-Task. Proactive-People leadership is generally considered the most effective style in project environments.</div></div>
+    </div></div>
+  </div>
+
+  <!-- WEEK 12 -->
+  <div id="w12" class="week-content">
+    <div class="week-hero"><div class="week-accent-bar"></div><div class="week-hero-body">
+      <div class="week-badge">Week 12</div>
+      <div class="week-title">Monitoring and Controlling Projects</div>
+      <div class="week-subtitle">Tracking performance, baselines, change management, risk control, and quality assurance</div>
+    </div></div>
+    <div class="section"><div class="section-label">Summary</div>
+      <div class="summary-box">Monitoring and controlling is a continuous process throughout project execution that involves tracking performance, comparing with plans, and taking corrective actions to ensure project objectives are achieved. Monitoring means observing and collecting data (Check), while controlling means making decisions and fixing deviations (Act). Together they form a feedback loop: Measure → Compare → Identify Deviations → Correct. Key areas include scope, schedule, and cost baselines; change management; risk monitoring; quality control; and performance measurement using KPIs.</div>
+    </div>
+    <div class="section"><div class="section-label">Key Points</div>
+      <ul class="key-points">
+        <li>Monitoring = Check (observe, collect data, identify deviations); Controlling = Act (analyze, decide, fix)</li>
+        <li>The feedback loop: Measure performance → Compare with plan → Identify deviations → Take corrective action</li>
+        <li>Three baselines used for comparison: Scope baseline, Schedule baseline, Cost baseline</li>
+        <li>Key monitoring activities: performance measurement, milestone tracking, risk monitoring, resource tracking, quality checking, documentation</li>
+        <li>Key control activities: issue resolution, risk mitigation, change management, resource reallocation, cost &amp; schedule adjustments</li>
+        <li>Change management: all changes must be documented, evaluated, and approved to prevent scope creep</li>
+        <li>Risk monitoring: identify risks early, maintain a risk log, apply mitigation strategies</li>
+        <li>Performance measured using KPIs: Time, Cost, Quality — planned vs actual comparison</li>
+        <li>Technology role: dashboards, Gantt charts, real-time data tracking, automated reporting, custom PM tools</li>
+        <li>Real-world analogy: "Driving a vehicle" — monitoring is checking speed/fuel/direction; controlling is steering/braking/accelerating</li>
+        <li>Challenges: poor data accuracy, communication gaps, scope creep, resistance to change, resource limitations</li>
+        <li>Solutions: reliable tools, better communication, change control systems, team training</li>
+      </ul>
+    </div>
+    <div class="section"><div class="section-label">Exam Q&amp;A</div><div class="qa-list">
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What is the difference between monitoring and controlling? <span class="qa-icon">▼</span></div><div class="qa-a">Monitoring is the "Check" phase — it involves observing progress, collecting data, and identifying deviations from the plan. Controlling is the "Act" phase — it involves making decisions, taking corrective actions, and fixing deviations. Both work together in a continuous feedback loop to keep the project on track.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What are the three project baselines used in monitoring and control? <span class="qa-icon">▼</span></div><div class="qa-a">1. Scope baseline — defines what is and is not included in the project. 2. Schedule baseline — the approved timeline against which actual progress is measured. 3. Cost baseline — the approved budget against which actual expenditure is compared. All three are used to evaluate planned vs actual performance.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">Describe the monitoring and control feedback loop. <span class="qa-icon">▼</span></div><div class="qa-a">The feedback loop has four steps: (1) Measure performance — collect data on project progress. (2) Compare with plan — assess actual against the baseline. (3) Identify deviations — determine where the project is off track. (4) Take corrective action — implement changes to realign with the plan. The loop repeats continuously throughout project execution.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">Why is change management important in monitoring and control? <span class="qa-icon">▼</span></div><div class="qa-a">Changes are inevitable in projects, but uncontrolled changes lead to scope creep — where the project grows beyond its original boundaries, consuming extra time and cost. A formal change management process ensures every change is documented, evaluated for impact, and formally approved before implementation, keeping the project within agreed constraints.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">What are the key objectives of monitoring and controlling? <span class="qa-icon">▼</span></div><div class="qa-a">Ensure the project stays on schedule, control costs, maintain quality standards, manage and mitigate risks, and improve decision-making. Collectively these objectives help ensure that project goals are achieved within the approved scope, time, and budget.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">List five common challenges in monitoring and controlling and their solutions. <span class="qa-icon">▼</span></div><div class="qa-a">Challenges: (1) Poor data accuracy, (2) Communication gaps, (3) Scope creep, (4) Resistance to change, (5) Resource limitations. Solutions: (1) Use reliable and automated tools, (2) Improve stakeholder communication, (3) Implement a formal change control system, (4) Train project teams on processes and change culture, (5) Proactively plan and reallocate resources as needed.</div></div>
+      <div class="qa-item"><div class="qa-q" onclick="toggle(this)">How does technology support monitoring and controlling? <span class="qa-icon">▼</span></div><div class="qa-a">Technology enables real-time data tracking through dashboards and project management software, automates status reporting, visualizes schedules via Gantt charts, and integrates with databases for up-to-date information. Organizations can also build custom PM tools using low-code/no-code platforms, offering flexibility and cost efficiency tailored to their needs.</div></div>
+    </div></div>
+  </div>
+
+</div>
+
+<script>
+  const weekIds = ['w1','w2','w3','w4','w5','w6','w7','w8','w9','w10','w11','w12'];
+  function show(id) {
+    document.querySelectorAll('.week-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    const idx = weekIds.indexOf(id);
+    if (idx >= 0) document.querySelectorAll('.tab')[idx].classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function toggle(el) {
+    el.closest('.qa-item').classList.toggle('open');
+  }
+</script>
+</body>
+</html>
